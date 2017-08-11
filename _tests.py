@@ -5,7 +5,7 @@ import time
 from struct import *
 import struct 
 
-print 'glb test'
+print 'glb test 0.1'
 print 'writes a simple glb file with a triangle'
 
 
@@ -130,8 +130,21 @@ jsonstr = json.dumps(jsonobj)
 print jsonstr
 
 with open('c:/tests/x3d2/x3d2/src/assets/test_e.glb', 'wb+') as f:
+    # head
+    f.write('glTF')
+    f.write(struct.pack('i',1))
+
+    jsonlength=sys.getsizeof(jsonstr) 
+    length =20+jsonlength+78
+    f.write(struct.pack('i',length)) #filelength
+    f.write(struct.pack('i',jsonlength)) #contentlength
+    f.write(struct.pack('i',0)) #contentformat
+
+
+    # json
     f.write( jsonstr)
 
+    # geometry data
     indices = [0,1,2]
     positions = [0.0,0.0,0.0,   0.0, 1.0, 0.0,   1.0, 1.0, 0.0]
     normals = [0.0,0.0,1.0,   0.0, 0.0, 1.0,   0.0, 0.0, 1.0]
